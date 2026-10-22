@@ -7,20 +7,21 @@ _Started: 10/22/26 by a cloud session. Moved into the Second Brain 10/22/26._
 ### design-work
 - **For:** Nick. ([his ask, 10/22/26](#the-task-waiting))
 - **Built from:** Not recorded.
-- **Method:** Research note plus roadmap per tool; shape proposed below, not yet approved.
+- **Method:** Two linked shelves, `tools/` and `recipes/`, each entry a research note plus roadmap. (Nick, 10/22/26 13:26 and 13:39; layout in README "How entries work".)
 - **Why now:** Not recorded.
 - **Done when:** Not recorded.
 - **Nick:** "I want to start a design project, and I need the folder on my desktop computer in the second brain so that I can create the context." (10/22/26 12:55)
 
 ## Log
 
+- **10/22/26 13:42 - first entries built.** The reel turned out to show a three-tool recipe, not one tool. Nick (13:26): tools each have their own merit and shouldn't be locked into one combination. So the layout is two linked shelves: `tools/` (Three.js, Motion, Claude) and `recipes/` (scroll particle wave). Committed locally, not pushed. Next: Nick reviews the entries; the recipe roadmap's first step is a free test page.
 - **10/22/26 13:07 - set up and saved.** Folder created in the brain as a submodule; repo kept public on Nick's call (13:02), with a no-private-content rule in the README. Next: the Facebook reel task below.
 
 ## Where things stand (10/22/26)
 
 - **Repo:** https://github.com/nickferrantelive/design-work
 - **In the brain:** `C:\SecondBrain\projects\design-work`, mounted as a submodule (like `clipping` and `ai-influencers`).
-- **Content:** just the project's starter files. No tool entries yet.
+- **Content:** three tool entries and one recipe entry (see `_INDEX.md`).
 - **Visibility:** public, by Nick's call on 10/22/26 13:02. Nothing private goes in it (README, Rules here).
 
 ## The task waiting
@@ -29,27 +30,11 @@ Research the tool shown in this Facebook reel, then write a research note and a 
 
 https://www.facebook.com/share/r/1FHSPTpe7Y/
 
-**Not done yet.** The cloud session couldn't open the reel (Facebook is blocked there). No research has been done, and nobody knows yet which tool the reel shows.
+**Done 10/22/26 13:42, awaiting Nick's review.** The caption (read in Chrome) describes a recipe: Three.js + Motion (formerly Framer Motion) + Claude. Filed as [recipes/scroll-particle-wave](recipes/scroll-particle-wave/research.md) with three tool entries. Open gaps, marked unverified in the entries: the live effect on the creator's site, particle count, and phone behavior.
 
-**First step:** find out which tool it is.
-- Open the reel in Chrome (Nick's logged-in session) and watch it or read its caption.
-- Otherwise ask Nick for the tool's name, the caption, or a screenshot.
-- Never guess the tool from the link.
+## Structure (approved by Nick 10/22/26 13:39)
 
-## Proposed structure (not yet approved)
-
-One folder per tool, plus the index listing every tool. Ask Nick before building it; he may want a different shape.
-
-```
-design-work/
-  README.md            what the repo is and how entries work
-  _INDEX.md            one line per tool: name, category, status, link
-  tools/
-    <tool-name>/
-      research.md      what it is, who makes it, pricing, strengths, limits, sources
-      roadmap.md       how Nick would adopt it, in steps, with a recommendation
-      sources.md       the post or reel that surfaced it, with the date found
-```
+The layout lives in README "How entries work". The earlier one-folder-per-tool proposal is superseded.
 
 ## What a good entry answers
 

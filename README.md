@@ -18,6 +18,19 @@ This folder is its own repo, [`nickferrantelive/design-work`](https://github.com
 - [HANDOFF.md](HANDOFF.md) - current state and the task waiting.
 - [_INDEX.md](_INDEX.md) - every file in this project.
 
+## How entries work (Nick, 10/22/26)
+Two shelves that link to each other, so a tool is never locked into one combination.
+
+- **`tools/<tool-name>/`** - one tool on its own: what it's good at in general, cost, verdict. Ends with a **Used in** list linking every recipe that uses it. A tool is researched once; later recipes link to it.
+  - `research.md` - what it is, who makes it, pricing, strengths, limits, sources.
+  - `roadmap.md` - adopt, try or skip, then steps to try it.
+- **`recipes/<recipe-name>/`** - a combination of tools that makes one effect or result. Starts with a **Built with** list linking each tool entry, and never repeats tool research.
+  - `research.md` - the effect, how the tools combine, verdict.
+  - `roadmap.md` - adopt, try or skip, then steps to try it.
+  - `sources.md` - the post or reel that surfaced it, with the date found.
+- **Sources go where they belong.** A post about a combination goes under the recipe; a post about one tool goes under the tool (a `sources.md` there).
+- **A new combination** = one new recipe folder plus a **Used in** line on each tool it uses.
+
 ## Rules here
 - **This repo is public (Nick, 10/22/26).** Nothing private goes in it: no client or member data, no credentials, no internal business numbers, no unreleased project details. Public tool research only.
 - Never spend credits or money, or sign up for a paid plan, without asking Nick first.
