@@ -12,12 +12,16 @@ _Started: 10/22/26 by a cloud session. Moved into the Second Brain 10/22/26._
 - **Done when:** Not recorded.
 - **Nick:** "I want to start a design project, and I need the folder on my desktop computer in the second brain so that I can create the context." (10/22/26 12:55)
 
+## Log
+
+- **10/22/26 13:07 - set up and saved.** Folder created in the brain as a submodule; repo kept public on Nick's call (13:02), with a no-private-content rule in the README. Next: the Facebook reel task below.
+
 ## Where things stand (10/22/26)
 
 - **Repo:** https://github.com/nickferrantelive/design-work
 - **In the brain:** `C:\SecondBrain\projects\design-work`, mounted as a submodule (like `clipping` and `ai-influencers`).
 - **Content:** just the project's starter files. No tool entries yet.
-- **Visibility:** the GitHub repo was public on 10/22/26. Every other brain project repo is private; Nick's call.
+- **Visibility:** public, by Nick's call on 10/22/26 13:02. Nothing private goes in it (README, Rules here).
 
 ## The task waiting
 
@@ -64,5 +68,5 @@ design-work/
 
 ## Open threads
 
-- **Visibility.** Public or private is Nick's call.
+- **Visibility: settled 10/22/26.** Public; see README Rules here.
 - **Brain registration: done 10/22/26.** The cloud handoff suggested `standalone-repos.json`, but that list is for repos nested inside another project. A top-level project with its own repo is a submodule under the brain's README Working rules, so it's registered in `.gitmodules` and `projects/_INDEX.md` instead.
