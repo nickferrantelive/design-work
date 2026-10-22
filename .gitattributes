@@ -1,0 +1,20 @@
+# Normalize line endings across Windows ↔ Linux (Delphi VPS). Prevents CRLF churn/phantom diffs.
+* text=auto eol=lf
+# Windows-only scripts keep CRLF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+# Treat these as binary (no EOL munging)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.pdf binary
+*.mp4 binary
+*.mov binary
+*.wav binary
+*.mp3 binary
+*.docx binary
+*.pptx binary
+*.xlsx binary

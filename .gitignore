@@ -1,0 +1,24 @@
+# Mirrors the Second Brain root ignore rules that apply here (the brain's .gitignore does not reach into a submodule).
+# ---- Heavy media (local only) ----
+*.mov
+*.mp4
+*.psd
+*.psb
+*.wav
+*.mp3
+*.zip
+# ---- Local-only stores ----
+chat-logs/
+# ---- Secrets ----
+.env
+.env.*
+!.env.example
+# ---- OS / tooling ----
+Thumbs.db
+desktop.ini
+.DS_Store
+node_modules/
+.venv/
+__pycache__/
+.playwright-mcp/
+**/.claude/settings.local.json
