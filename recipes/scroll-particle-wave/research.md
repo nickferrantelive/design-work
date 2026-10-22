@@ -43,5 +43,9 @@ A page made of about 9,000 points of light that swarm from one shape into the ne
 - It's decoration. On pages whose job is to explain or sell clearly, it can get in the way.
 - Copying his look is not the goal. Build our own shapes and timing; the technique is common practice.
 
+## Our test page (10/22/26)
+- Claude built a [test page](test-page/index.html) from this recipe.
+- It ran smoothly on desktop (about 80 frames a second) and on Nick's phone at 4,000 points. Nick: "look and work great."
+
 ## Verdict: strong, for brand and hero moments
-A free, proven technique that Claude can build. Its weak spot is phones, which a test page will settle.
+A free, proven technique that Claude can build. Phones were the open question, and our test page settled it on 10/22/26.

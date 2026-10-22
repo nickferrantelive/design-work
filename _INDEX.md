@@ -27,4 +27,4 @@ _One line per tool: name, category, verdict, link. Layout in README "How entries
 ## Recipes
 _One line per recipe: name, what it makes, tools used, verdict, link._
 
-- [Scroll particle wave](recipes/scroll-particle-wave/research.md) - points that swarm between shapes on scroll - Three.js, Motion, Claude - strong, try - [roadmap](recipes/scroll-particle-wave/roadmap.md), [sources](recipes/scroll-particle-wave/sources.md), [test page](recipes/scroll-particle-wave/test-page/index.html)
+- [Scroll particle wave](recipes/scroll-particle-wave/research.md) - points that swarm between shapes on scroll - Three.js, Motion, Claude - strong, adopt (phone test passed 10/22/26) - [roadmap](recipes/scroll-particle-wave/roadmap.md), [sources](recipes/scroll-particle-wave/sources.md), [test page](recipes/scroll-particle-wave/test-page/index.html)
