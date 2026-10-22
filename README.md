@@ -19,6 +19,7 @@ This folder is its own repo, [`nickferrantelive/design-work`](https://github.com
 - [_INDEX.md](_INDEX.md) - every file in this project.
 
 ## Rules here
+- **This repo is public (Nick, 10/22/26).** Nothing private goes in it: no client or member data, no credentials, no internal business numbers, no unreleased project details. Public tool research only.
 - Never spend credits or money, or sign up for a paid plan, without asking Nick first.
 - If a site needs a login, ask Nick to log in. Never enter his credentials.
 - Facebook and Instagram links open in Chrome (Nick's logged-in session), never a fresh browser.
