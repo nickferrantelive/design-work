@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scroll Particle Wave</title>
+<!-- Test page for recipes/scroll-particle-wave. Built 10/22/26. Throwaway: not for production. -->
+<style>
+  :root {
+    --bg: #07070a;
+    --ink: #f2eee8;
+    --muted: #8d8a85;
+    --accent: #ff8a3d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  canvas#scene { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; z-index: 0; }
+  main { position: relative; z-index: 1; pointer-events: none; height: 520vh; }
+  .card {
+    position: fixed; left: 24px; right: 24px; bottom: 10vh; z-index: 1;
+    max-width: 30rem; pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .card.out { opacity: 0; transform: translateY(8px); }
+  @media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+  .eyebrow { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  h2 { font-size: clamp(24px, 4vw, 40px); font-weight: 600; line-height: 1.15; margin: 0 0 8px; }
+  p { color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0; }
+  .hud {
+    position: fixed; top: 16px; right: 16px; z-index: 2;
+    font: 12px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+    color: var(--muted); text-align: right;
+  }
+  .hud b { color: var(--ink); font-weight: 500; }
+  .tag { position: fixed; top: 16px; left: 16px; z-index: 2; font-size: 12px; color: var(--muted); }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "motion": "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm"
+} }
+</script>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="tag">Scroll particle wave · test page · 10/22/26</div>
+<div class="hud">
+  points <b id="hud-count">-</b><br>
+  scroll <b id="hud-scroll">0.000</b><br>
+  shown <b id="hud-shown">0.000</b><br>
+  <span id="hud-mode"></span>
+</div>
+
+<main aria-hidden="true"></main>
+<!-- One caption, swapped to match whichever shape is holding. -->
+<div class="card" id="card" aria-live="polite">
+  <p class="eyebrow" id="card-eyebrow"></p>
+  <h2 id="card-title"></h2>
+  <p id="card-body"></p>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+
+// ---- Settings -------------------------------------------------------------
+const isSmall = matchMedia("(max-width: 768px)").matches;
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const COUNT = isSmall ? 4000 : 9000;      // fewer points on phones
+const SHAPES = 4;
+
+// ---- Shape builders: each returns a Float32Array of COUNT * 3 -------------
+function sphere() {
+  const a = new Float32Array(COUNT * 3);
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < COUNT; i++) {
+    const y = 1 - (i / (COUNT - 1)) * 2;
+    const r = Math.sqrt(1 - y * y);
+    const t = golden * i;
+    a.set([Math.cos(t) * r * 1.7, y * 1.7, Math.sin(t) * r * 1.7], i * 3);
+  }
+  return a;
+}
+
+function wave() {
+  const a = new Float32Array(COUNT * 3);
+  const cols = Math.ceil(Math.sqrt(COUNT * 2));
+  const rows = Math.ceil(COUNT / cols);
+  for (let i = 0; i < COUNT; i++) {
+    const x = ((i % cols) / (cols - 1) - 0.5) * 9;
+    const z = (Math.floor(i / cols) / (rows - 1) - 0.5) * 4.5;
+    const y = Math.sin(x * 1.1) * 0.45 + Math.cos(z * 1.8 + x * 0.4) * 0.25 - 0.4;
+    a.set([x, y, z], i * 3);
+  }
+  return a;
+}
+
+function knot() {
+  const a = new Float32Array(COUNT * 3);
+  const p = 2, q = 3;
+  for (let i = 0; i < COUNT; i++) {
+    const t = (i / COUNT) * Math.PI * 2;
+    const r = 1.15 + 0.45 * Math.cos(q * t);
+    const cx = r * Math.cos(p * t), cy = r * Math.sin(p * t), cz = 0.45 * Math.sin(q * t);
+    const jitter = () => (Math.random() - 0.5) * 0.22;
+    a.set([cx + jitter(), cy + jitter(), cz + jitter()], i * 3);
+  }
+  return a;
+}
+
+function word(text) {
+  const w = 1024, h = 256;
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const ctx = c.getContext("2d");
+  ctx.fillStyle = "#fff";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "900 150px system-ui, sans-serif";
+  ctx.fillText(text, w / 2, h / 2);
+  const data = ctx.getImageData(0, 0, w, h).data;
+  const hits = [];
+  for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) {
+    if (data[(y * w + x) * 4 + 3] > 128) hits.push(x, y);
+  }
+  const a = new Float32Array(COUNT * 3);
+  const span = 6.5;
+  for (let i = 0; i < COUNT; i++) {
+    const k = Math.floor(Math.random() * (hits.length / 2)) * 2;
+    const x = (hits[k] / w - 0.5) * span;
+    const y = -(hits[k + 1] / h - 0.5) * span * (h / w);
+    a.set([x, y, (Math.random() - 0.5) * 0.15], i * 3);
+  }
+  return a;
+}
+
+// ---- Scene ----------------------------------------------------------------
+const canvas = document.getElementById("scene");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setClearColor(0x07070a, 1);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+camera.position.set(0, 0, 6.2);
+
+const geo = new THREE.BufferGeometry();
+const shapes = [sphere(), wave(), knot(), word("DESIGN")];
+shapes.forEach((arr, i) => geo.setAttribute(`aPos${i}`, new THREE.BufferAttribute(arr, 3)));
+geo.setAttribute("position", new THREE.BufferAttribute(shapes[0].slice(), 3)); // bounds only
+const delay = new Float32Array(COUNT);
+for (let i = 0; i < COUNT; i++) delay[i] = Math.random();
+geo.setAttribute("aDelay", new THREE.BufferAttribute(delay, 1));
+geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 10);
+
+const mat = new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  uniforms: {
+    uProgress: { value: 0 },
+    uTime: { value: 0 },
+    uDrift: { value: reduceMotion ? 0 : 1 },
+    uSize: { value: (isSmall ? 2.6 : 3.2) * Math.min(devicePixelRatio, 2) },
+  },
+  vertexShader: /* glsl */`
+    attribute vec3 aPos0; attribute vec3 aPos1; attribute vec3 aPos2; attribute vec3 aPos3;
+    attribute float aDelay;
+    uniform float uProgress; uniform float uTime; uniform float uDrift; uniform float uSize;
+    varying float vDelay; varying float vMove;
+
+    vec3 shapeAt(float i) {
+      if (i < 0.5) return aPos0;
+      if (i < 1.5) return aPos1;
+      if (i < 2.5) return aPos2;
+      return aPos3;
+    }
+
+    void main() {
+      float s = uProgress * ${(SHAPES - 1).toFixed(1)};
+      float i = min(floor(s), ${(SHAPES - 2).toFixed(1)});
+      float f = s - i;
+      // Hold each shape at the start and end of its segment; move in the middle.
+      float g = smoothstep(0.2, 0.8, f);
+      // Each point leaves a little early or late: that's the swarm.
+      float t = smoothstep(aDelay * 0.45, aDelay * 0.45 + 0.55, g);
+      vec3 p = mix(shapeAt(i), shapeAt(i + 1.0), t);
+      // Points in flight bulge outward a little.
+      float flight = sin(t * 3.14159);
+      p += normalize(p + 0.0001) * flight * 0.35;
+      // Gentle idle drift (off for reduced motion).
+      p += uDrift * 0.03 * vec3(sin(uTime * 0.9 + aDelay * 40.0), cos(uTime * 0.7 + aDelay * 25.0), sin(uTime * 0.5 + aDelay * 10.0));
+      // The wave shape keeps rolling.
+      float onWave = (i < 0.5) ? t : ((i < 1.5) ? 1.0 - t : 0.0);
+      p.y += uDrift * onWave * sin(p.x * 1.1 + uTime * 1.2) * 0.12;
+
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
+      gl_Position = projectionMatrix * mv;
+      gl_PointSize = uSize * (1.0 + flight * 0.6) * (6.0 / -mv.z);
+      vDelay = aDelay; vMove = flight;
+    }
+  `,
+  fragmentShader: /* glsl */`
+    varying float vDelay; varying float vMove;
+    void main() {
+      vec2 c = gl_PointCoord - 0.5;
+      float d = length(c);
+      if (d > 0.5) discard;
+      float a = smoothstep(0.5, 0.0, d);
+      vec3 warm = vec3(1.0, 0.54, 0.24);
+      vec3 cool = vec3(0.95, 0.93, 0.9);
+      vec3 col = mix(cool, warm, vDelay * 0.7 + vMove * 0.3);
+      gl_FragColor = vec4(col, a * 0.75);
+    }
+  `,
+});
+const points = new THREE.Points(geo, mat);
+scene.add(points);
+
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  // Pull the camera back on narrow screens so the word (6.5 wide) fits with margin.
+  const halfFov = THREE.MathUtils.degToRad(camera.fov / 2);
+  camera.position.z = Math.max(6.2, 3.6 / (Math.tan(halfFov) * camera.aspect));
+  camera.updateProjectionMatrix();
+}
+addEventListener("resize", resize);
+resize();
+
+// ---- Scroll -> one number, 0 to 1 -----------------------------------------
+// Motion's scroll() writes the number; React-free here, so nothing re-renders.
+let target = 0;
+let source = "manual";
+function manualProgress() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  target = max > 0 ? scrollY / max : 0;
+}
+try {
+  const { scroll } = await import("motion");
+  scroll((progress, info) => {
+    const v = info && info.y ? info.y.progress : progress;
+    if (typeof v === "number" && !Number.isNaN(v)) target = v;
+  });
+  source = "motion";
+} catch (err) {
+  console.warn("Motion did not load; using a plain scroll listener.", err);
+  addEventListener("scroll", manualProgress, { passive: true });
+  manualProgress();
+}
+
+// ---- Frame loop: read the number every frame -------------------------------
+const hudCount = document.getElementById("hud-count");
+const hudScroll = document.getElementById("hud-scroll");
+const hudShown = document.getElementById("hud-shown");
+document.getElementById("hud-mode").textContent =
+  `${source}${isSmall ? " · small screen" : ""}${reduceMotion ? " · reduced motion" : ""}`;
+hudCount.textContent = COUNT.toLocaleString();
+
+const CAPTIONS = [
+  ["01 · Sphere", "Every point has a home in every shape.", "Scroll slowly. Each point leaves a little early or late, so the move reads as a swarm."],
+  ["02 · Wave", "Scroll becomes one number, 0 to 1.", "Motion tracks the scroll. The frame loop reads that number, so the page never re-renders while you scroll."],
+  ["03 · Knot", "The shapes are just lists of positions.", "Swap in any shape: a logo, a product outline, a word."],
+  ["04 · Word", "Like this one.", "The last shape is sampled from text drawn on a hidden canvas."],
+];
+const card = document.getElementById("card");
+let captionIndex = -1;
+function setCaption(i) {
+  const [eyebrow, title, body] = CAPTIONS[i];
+  document.getElementById("card-eyebrow").textContent = eyebrow;
+  document.getElementById("card-title").textContent = title;
+  document.getElementById("card-body").textContent = body;
+}
+function updateCaption(progress) {
+  const s = progress * (SHAPES - 1);
+  const nearest = Math.round(s);
+  // Show a caption only while its shape is holding (not mid-flight).
+  const holding = Math.abs(s - nearest) < 0.22;
+  if (nearest !== captionIndex && holding) {
+    captionIndex = nearest;
+    setCaption(nearest);
+  }
+  card.classList.toggle("out", !holding);
+}
+
+let shown = 0;
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  // Ease toward the scroll number; jump straight there for reduced motion.
+  shown = reduceMotion ? target : shown + (target - shown) * (1 - Math.exp(-dt * 5));
+  mat.uniforms.uProgress.value = shown;
+  mat.uniforms.uTime.value += dt;
+  points.rotation.y = reduceMotion ? 0 : Math.sin(mat.uniforms.uTime.value * 0.1) * 0.25;
+  renderer.render(scene, camera);
+  updateCaption(shown);
+  hudScroll.textContent = target.toFixed(3);
+  hudShown.textContent = shown.toFixed(3);
+});
+</script>
+</body>
+</html>

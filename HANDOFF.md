@@ -14,6 +14,7 @@ _Started: 10/22/26 by a cloud session. Moved into the Second Brain 10/22/26._
 
 ## Log
 
+- **10/22/26 13:48 - test page built.** [recipes/scroll-particle-wave/test-page](recipes/scroll-particle-wave/test-page/index.html): one HTML file, four shapes, Motion driving scroll. Checked in the app's browser at desktop width: no console errors, about 80 fps at mid-scroll, all four shapes and captions correct. **Not verified:** the phone path (4,000 points, camera pulled back), because the browser pane's phone emulation didn't apply on load. Needs a real phone. Committed locally, not pushed.
 - **10/22/26 13:42 - first entries built.** The reel turned out to show a three-tool recipe, not one tool. Nick (13:26): tools each have their own merit and shouldn't be locked into one combination. So the layout is two linked shelves: `tools/` (Three.js, Motion, Claude) and `recipes/` (scroll particle wave). Committed locally, not pushed. Next: Nick reviews the entries; the recipe roadmap's first step is a free test page.
 - **10/22/26 13:07 - set up and saved.** Folder created in the brain as a submodule; repo kept public on Nick's call (13:02), with a no-private-content rule in the README. Next: the Facebook reel task below.
 

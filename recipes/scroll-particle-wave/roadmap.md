@@ -16,6 +16,7 @@ Build one free test page, then decide where it earns a place. No money or credit
 
 ## Steps (free first)
 1. **Test page.** Have Claude build a throwaway page: about 9,000 points, three shapes, scroll from one to the next. Use [Three.js](../../tools/three-js/roadmap.md) and the free [Motion](../../tools/motion/roadmap.md) library.
+   - **Built 10/22/26:** [test-page/index.html](test-page/index.html). One file, no install. Open it in a browser and scroll. Four shapes (sphere, wave, knot, the word DESIGN). It uses 4,000 points on screens 768px wide or less and a still version for reduced motion. Pinned to Three.js 0.160.0 and Motion 11.11.13 from the jsDelivr CDN, older than the current releases on purpose. A HUD shows the point count and the scroll number.
 2. **Make the shapes ours.** Swap in shapes that mean something to the brand, such as a logo mark or a word, so it isn't a copy of the reel.
 3. **Phone check.** Open it on a real phone. Set a smaller point count for small screens and a still image for people with reduced motion turned on.
 4. **Speed check.** Confirm the page still loads fast and scrolls smoothly on a mid-range laptop.
