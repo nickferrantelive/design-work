@@ -14,6 +14,7 @@ _Started: 10/22/26 by a cloud session. Moved into the Second Brain 10/22/26._
 
 ## Log
 
+- **11/23/26 17:53 - third plumbing test from the desktop, second of two saves.** Two chats saved one after the other through the save line: this entry is the only change, and no tool or recipe content moved.
 - **11/23/26 17:52 - third plumbing test from the desktop, first of two saves.** Two chats saved one after the other through the save line: this entry is the only change, and no tool or recipe content moved.
 - **11/23/26 02:49 - second plumbing test from the desktop.** A save that was refused while offline, then published once back online: this entry is the only change, and no tool or recipe content moved.
 - **11/22/26 22:38 - first save published from the desktop.** A plumbing test: this entry is the only change, and no tool or recipe content moved.
