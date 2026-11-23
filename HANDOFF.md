@@ -14,6 +14,7 @@ _Started: 10/22/26 by a cloud session. Moved into the Second Brain 10/22/26._
 
 ## Log
 
+- **11/23/26 02:49 - second plumbing test from the desktop.** A save that was refused while offline, then published once back online: this entry is the only change, and no tool or recipe content moved.
 - **11/22/26 22:38 - first save published from the desktop.** A plumbing test: this entry is the only change, and no tool or recipe content moved.
 - **10/22/26 14:07 - phone test passed; recipe moved to adopt.** Pushed at Nick's request (14:01). Nick opened the [public link](https://raw.githack.com/nickferrantelive/design-work/main/recipes/scroll-particle-wave/test-page/index.html) on his phone: 4,000 points, "look and work great" on desktop and phone. Next: roadmap step 2, brand shapes, waiting on Nick to name the brand.
 - **10/22/26 13:48 - test page built.** [recipes/scroll-particle-wave/test-page](recipes/scroll-particle-wave/test-page/index.html): one HTML file, four shapes, Motion driving scroll. Checked in the app's browser at desktop width: no console errors, about 80 fps at mid-scroll, all four shapes and captions correct. **Not verified:** the phone path (4,000 points, camera pulled back), because the browser pane's phone emulation didn't apply on load. Needs a real phone. Committed locally, not pushed.
